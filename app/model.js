@@ -12,8 +12,8 @@
 // publick 772be7546fe74b64a8a6a363bddc134b
 // url gets news https://api.instagram.com/v1/users/self/media/recent/?access_token=1501843681.1677ed0.3cfb942e751a42be8b9e7ee5e7f1994e
 
-/*
-var Model = {
+
+export const Model = {
     login: function(appId) {
 
         return new Promise(function(res, rej) {
@@ -40,7 +40,7 @@ var Model = {
 
                 }
 
-            });
+            },{ scope: 'email,user_photos,user_birthday,user_location' });
 
         });
 
@@ -75,59 +75,3 @@ var Model = {
 
     }
 }
-
-
-Model.login(250459012149247).then(
-    function(response){
-        return new Promise(function(res, rej) {
-
-            FB.api("/me/friendlists", function(response) {
-
-                if (!response || response.error) {
-
-                    rej(new Error('i con not get info'))
-
-                } else {
-
-                    res(response);
-
-                }
-
-
-            })
-    })}).then(function(response){console.log(response);})
-
-		*/
-
-
-var Model = {
-	getInfo : function(){
-
-     return new Promise(function(res, rej){
-
-			var xhr = new XMLHttpRequest();
-			xhr.withCredentials = true;
-
-			xhr.open('GET', 'https://api.instagram.com/v1/users/self/media/recent/?access_token=1501843681.1677ed0.3cfb942e751a42be8b9e7ee5e7f1994e', true);
-
-			xhr.send();
-
-			if(xhr.status != 200){
-
-				rej(new Error('i can not download json'))
-
-			}else{
-
-         res(xhr.response);
-
-			}
-
-		 })
-	}
-}
-
-Model.getInfo().then(function(resp){
-
-   console.log(resp)
-
-})
