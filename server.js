@@ -9,8 +9,9 @@ app.use(express.static('app'))
 
 app.use('/app', express.static(__dirname + '/app'));
 
-app.get('/', function(req, res) {
 
+app.get('/', function(req, res) {
+	res.header('Access-Control-Allow-Origin', "*")
 	res.sendFile('index.html', {root: __dirname + '/app/'});
 
 });
