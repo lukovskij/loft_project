@@ -1,48 +1,26 @@
-import { Model } from './model';
+import { Controller } from './controller';
 
 
-Model.login(250459012149247)
-    .then(
-        function(response) {
-            return new Promise(function(res, rej) {
-
-                FB.api("/221085174613271/photos", 'get', function(response) {
-
-                    if (!response || response.error) {
-
-                        rej(new Error('i con not get info'))
-
-                    } else {
-
-                        res(response);
-
-                    }
+Controller.getPhotos();
 
 
-                })
-            })
-        })
-    .then(function(response) {
+allPhotos.addEventListener('click', function(e) {
+	
+	if(e.target.className.indexOf('btn') != -1){
 
-        let arratImages = [];
+		Controller.checkPhoto(e);
 
-arratImages  = [].map.call(response, (item) => {
+	}
 
-	return new Promise(function(res, rej)){
+});
 
-            FB.api('/' + item.id, 'get', function(response) {
 
-                if (!response || response.error) {
+choosePhotos.addEventListener('click', function(e) {
+	
+	if(e.target.className.indexOf('btn') != -1){
 
-                    return new Error('i con not get info')
+		Controller.checkPhoto(e);
 
-                } else {
+	}
 
-                    arratImages.push(response);
-                    console.log(arratImages);
-
-                }
-}
-            })
-        })
-    })
+});

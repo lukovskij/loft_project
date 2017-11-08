@@ -40,17 +40,16 @@ export const Model = {
 
                 }
 
-            },{ scope: 'email,user_photos,user_birthday,user_location' });
+            }, { scope: 'email,user_photos,user_birthday,user_location' });
 
         });
 
     },
 
-    callApi: function(path) {
-
+    photos: function() {
         return new Promise(function(res, rej) {
 
-            FB.api(path, function(response) {
+            FB.api("/221085174613271/photos", { fields: 'picture, created_time' }, function(response) {
 
                 if (!response || response.error) {
 
@@ -61,17 +60,7 @@ export const Model = {
                     res(response);
 
                 }
-
-
             })
-
-        });
-
-    },
-
-    getFriends: function() {
-
-        return this.callApi('/me/friends');
-
+        })
     }
 }
