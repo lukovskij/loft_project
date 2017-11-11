@@ -1,6 +1,6 @@
 export const View = {
 
-    renderPhotos: function(objArr, parent) {
+    renderPhotos: function(objArr, parent, callBack) {
 
         let self = this;
 
@@ -8,20 +8,23 @@ export const View = {
         if (el) {
             self._getSinglePoto(el.picture).then((url) => {
 
-             
+
+
                 let item = document.createElement('li');
                 item.className = "friend-item";
-
+                item.setAttribute('data-id', el.id);
 
                 item.innerHTML = `<img src="${url}" class="img"/> <div class="info">${el.created_time}</div><button class="btn btn_check"></button>`;
 
-                console.log(item);
-
                 parent.appendChild(item);
 
-                self.renderPhotos(objArr, parent);
-
+                self.renderPhotos(objArr, parent, callBack);
             })
+        } 
+        if(el == undefined) {
+            if (callBack !== undefined) {
+                callBack()
+            };
         }
     },
 
@@ -49,15 +52,15 @@ export const View = {
 
     },
 
-    renderChoseItem : function( parent, photo ) {
+    renderChoseItem: function(parent, photo) {
 
-    	parent.appendChild(photo)
+        parent.appendChild(photo)
 
     },
 
-    removeItem : function( parent, item ){
+    removeItem: function(parent, item) {
 
-    	parent.removeChild(item);
+        parent.removeChild(item);
 
     }
 

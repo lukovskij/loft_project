@@ -3,28 +3,112 @@ import { View } from './view';
 
 export const Controller = {
 
+    _checkPhotosArray: JSON.parse(localStorage.photos) || [],
+    _allPhotos: [],
+
     getPhotos: function() {
 
-        return Model.login('250459012149247').then(Model.photos).then(function(resp) {
-        	console.log(resp);
-           View.renderPhotos(resp.data, allPhotos);
-        }) 
+        Model.login('250459012149247').then(Model.photos).then(function(resp) {
+
+            resp.data.forEach(item => {
+
+                Controller._allPhotos.push(item);
+
+            });
+
+            View.renderPhotos(resp.data, allPhotos, function() {
+
+                if (Controller._checkPhotosArray.length !== 0) {
+
+                    Controller._checkPhotosArray.forEach(item => {
+   
+                       Controller._toggleItem(item.id, allPhotos);
+
+                    })
+
+                }
+
+            })
+
+            let arrayChoose = Controller._checkPhotosArray.slice();
+            View.renderPhotos(arrayChoose, choosePhotos)
+        });
     },
 
-    checkPhoto : function(e) {
+    checkPhoto: function(e) {
 
-    	let currItem = e.target;
+        let currItem = e.target.parentNode,
+            idItem = currItem.dataset.id;
 
-    	let listParent = currItem.parentNode.parentNode;
+        let chekItems = Controller._allPhotos.filter(item => {
 
-    	let cloneItem = currItem.parentNode.cloneNode(true);
+            if (item.id == idItem) {
+                Controller._checkPhotosArray.push(item);
+                return item;
+            }
 
-    	console.log(currItem.parentNode.parentNode);
+        });
 
-    	View.renderChoseItem(cloneItem);
+        //hide element
+        currItem.setAttribute('style', 'display:none');
 
-    	View.removeItem( listParent,  currItem.parentNode);
+        View.renderPhotos(chekItems, choosePhotos);
 
-    }
+        console.log(Controller._checkPhotosArray);
+
+    },
+
+    removeCheckItem: function(e) {
+
+        let currItem = e.target.parentNode,
+            idItem = currItem.dataset.id;
+
+        let chekItems = Controller._checkPhotosArray.filter(item => {
+
+            if (idItem == item.id) {
+                return item;
+            }
+
+        });
+
+        let currentArr = Controller._checkPhotosArray.filter( item => {
+
+        	if(item.id != idItem){
+
+        		return item;
+
+        	}
+
+        });
+
+        Controller._checkPhotosArray = currentArr.slice();
+      
+        currItem.parentNode.removeChild(currItem);
+
+        this._toggleItem(idItem, allPhotos);
+
+    },
+
+    _toggleItem: function(id, parent) {
+
+        if (parent.querySelector(`[data-id="${id}"]`).style.display == 'none') {
+
+            parent.querySelector(`[data-id="${id}"]`).setAttribute('style', '');
+
+        } else {
+
+            parent.querySelector(`[data-id="${id}"]`).style.display = 'none';
+
+        }
+
+    },
+
+    savePhotos: function() {
+
+        localStorage.setItem('photos', JSON.stringify(Controller._checkPhotosArray));
+
+
+    },
+
 
 }

@@ -19,8 +19,10 @@ choosePhotos.addEventListener('click', function(e) {
 	
 	if(e.target.className.indexOf('btn') != -1){
 
-		Controller.checkPhoto(e);
+		Controller.removeCheckItem(e);
 
 	}
 
 });
+
+savePhotos.addEventListener('click', Controller.savePhotos);
